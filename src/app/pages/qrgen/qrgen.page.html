@@ -19,12 +19,10 @@
         <ion-input (ionChange)="validAmount()" [color]="amountColor"   [(ngModel)] = "amount"></ion-input>
     </ion-item>
 
-
   <ion-button ion-button expand="block" (click)="generateQR()">
     Generate QR
   </ion-button>
   <ion-button ion-button expand="block" (click)="returnToProfileButtonOnclick()">Return to Profile</ion-button> 
-
 
   <ngx-qrcode 
     [qrc-value] = "qrCodeText"

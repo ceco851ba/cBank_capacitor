@@ -16,27 +16,27 @@
     <ion-input clearInput placeholder ="title"  [(ngModel)]="profile.userTitle" type = "text" ></ion-input>
 </ion-item>
 <ion-item>
-    <ion-label color="primary" floating>Name</ion-label>
-    <ion-input clearInput placeholder ="Name"  value = '{{profile.userName}}' [(ngModel)]="profile.userName" type = "text" ></ion-input>
+    <ion-label [color]="UserNameColor" floating>Name</ion-label>
+    <ion-input (ionChange)="userNameChange()" [color]="UserNameColor" clearInput placeholder ="Name"   [(ngModel)]="profile.userName" type = "text" ></ion-input>
 </ion-item>
 <ion-item>
-    <ion-label color="primary" floating>Surname</ion-label>
-    <ion-input clearInput placeholder ="Surname"  value = '{{profile.userSurname}}' [(ngModel)]="profile.userSurname" type = "text" ></ion-input>
+    <ion-label [color]="UserSurnameColor" floating>Surname</ion-label>
+    <ion-input (ionChange)="userSurnameChange()" [color]="UserSurnameColor" clearInput placeholder ="Surname"   [(ngModel)]="profile.userSurname" type = "text" ></ion-input>
 </ion-item>
 <ion-item>
     <ion-label color="primary" floating>Title 2</ion-label>
-    <ion-input clearInput placeholder ="phd" value = '{{profile.userTitle2}}' [(ngModel)]="profile.userTitle2" type = "text" ></ion-input>
+    <ion-input clearInput placeholder ="phd" [(ngModel)]="profile.userTitle2" type = "text" ></ion-input>
 </ion-item>
 
 <ion-item>    
-        <ion-label color="primary" floating>Email</ion-label>
-    <ion-input type="email" clearInput placeholder ="email"  [(ngModel)]="profile.userEmail"  ></ion-input>   
+        <ion-label [color]="UserEmailColor" floating>Email</ion-label>
+    <ion-input (ionChange)="userEmailChange()" [color]="UserEmailColor" type="email" clearInput placeholder ="email"  [(ngModel)]="profile.userEmail"  ></ion-input>   
   </ion-item>
 
   <ion-item>    
-      <ion-label color="primary" floating>Tel Number</ion-label>
+      <ion-label [color]="UserPhoneColor" floating>Tel Number</ion-label>
      <!--Tel Number is type string due to problem with numbers starting with 0 --> 
-  <ion-input type="string" clearInput placeholder ="0903123123"  [(ngModel)]="profile.userPhonenum"  ></ion-input>   
+  <ion-input (ionChange)="userPhonenumChange()" [color]="UserPhoneColor" type="string" clearInput placeholder ="0903123123"  [(ngModel)]="profile.userPhonenum"  ></ion-input>   
 </ion-item>
 
 <ion-item>    
