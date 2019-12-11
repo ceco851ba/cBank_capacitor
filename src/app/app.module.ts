@@ -43,27 +43,29 @@ this.CreateTransactionList();
 }
 
 GenerateProfile(){
-
-    this.profile.userId       = 0;
-    this.profile.userTitle    = 'Bc.'
-    this.profile.userName     = 'Michal';
-    this.profile.userSurname  = 'Ceconik';
-    this.profile.userTitle2   = '';
-    this.profile.userIBAN     = 'SK9221162518545481819831';
-    this.profile.userBalance  = 10000;
-    this.profile.userAddress  = 'mojaAdresa';
-    this.profile.userCity     = 'Bratislava';
-    this.profile.userEmail    = 'ceco851ba@gmail.com';
-    this.profile.userPhonenum = '0909123123';
-
-
-  this.storage.set("user", JSON.stringify(this.profile));
-  this.profile = new User();
   this.storage.get('user').then((val) => {
-    console.log('Your json is', val);
-    let usr = new User();
-    usr = JSON.parse(val);
-    console.log(usr);
+    if(val === null) {
+      this.profile.userId       = 0;
+      this.profile.userTitle    = 'Bc.'
+      this.profile.userName     = 'Michal';
+      this.profile.userSurname  = 'Ceconik';
+      this.profile.userTitle2   = '';
+      this.profile.userIBAN     = 'SK9221162518545481819831';
+      this.profile.userBalance  = 10000;
+      this.profile.userAddress  = 'mojaAdresa';
+      this.profile.userCity     = 'Bratislava';
+      this.profile.userEmail    = 'ceco851ba@gmail.com';
+      this.profile.userPhonenum = '0909123123';
+
+
+      this.storage.set("user", JSON.stringify(this.profile));
+    } else {
+      console.log('Your json is', val);
+      let usr = new User();
+      usr = JSON.parse(val);
+      this.profile = usr;
+      console.log(usr);
+    }
   });
 
   console.log(this.profile);
