@@ -200,6 +200,9 @@ var Tab3Page = /** @class */ (function () {
         var _this = this;
         this.barcodeScanner.scan().then(function (barcodeData) {
             _this.presentToast2(barcodeData);
+            var qrData = JSON.parse(barcodeData.text);
+            _this.receiverId = qrData.receiverId || null;
+            // doplnit ostatne data 
         }).catch(function (err) {
             _this.presentToast2(err);
             console.log('Error', err);

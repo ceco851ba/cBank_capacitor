@@ -32,6 +32,10 @@ export class Tab1Page {
   gotoNewTransButtonOnclick(){
     this.navController.navigateRoot("tabs/tab3");
   }
+
+  gotoQRgenButtonOnclick() {
+    this.navController.navigateForward("qrgen");
+  }
   ionViewDidEnter() {
     this.refreshOnClick();
   }

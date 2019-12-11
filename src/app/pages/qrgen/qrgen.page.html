@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>QRgen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item>
+      <ion-label  color="danger" position="floating">Reciever ID</ion-label>
+      <ion-input placeholder="Required" type = "number" min="0" max="10"   [(ngModel)] = "receiverId" required></ion-input>
+  </ion-item>
+  <ion-button (click)="generateQR()">
+    Generate QR
+  </ion-button>
+  <ngx-qrcode 
+    [qrc-value] = "qrCodeText"
+    qrc-class = "aclass"
+    qrc-errorCorrectionLevel = "L">
+  </ngx-qrcode>
+</ion-content>

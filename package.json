@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "buildandroid":"ionic build && npx cap copy android && npx cap open android"
+    "buildandroid": "ionic build && npx cap copy android && npx cap open android"
   },
   "private": true,
   "dependencies": {
@@ -31,6 +31,7 @@
     "@ionic/storage": "^2.2.0",
     "cordova-sqlite-storage": "^3.4.1",
     "core-js": "^2.5.4",
+    "ngx-qrcode2": "0.0.9",
     "phonegap-plugin-barcodescanner": "^8.1.0",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",

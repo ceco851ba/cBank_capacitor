@@ -479,6 +479,10 @@ var routes = [
     {
         path: 'transaction-details-page',
         loadChildren: function () { return __webpack_require__.e(/*! import() | pages-transaction-details-page-transaction-details-page-module */ "pages-transaction-details-page-transaction-details-page-module").then(__webpack_require__.bind(null, /*! ./pages/transaction-details-page/transaction-details-page.module */ "./src/app/pages/transaction-details-page/transaction-details-page.module.ts")).then(function (m) { return m.TransactionDetailsPagePageModule; }); }
+    },
+    {
+        path: 'qrgen',
+        loadChildren: function () { return __webpack_require__.e(/*! import() | pages-qrgen-qrgen-module */ "pages-qrgen-qrgen-module").then(__webpack_require__.bind(null, /*! ./pages/qrgen/qrgen.module */ "./src/app/pages/qrgen/qrgen.module.ts")).then(function (m) { return m.QRgenPageModule; }); }
     }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -796,7 +800,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/ceco851ba/cBank_Final/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /Users/ceco851ba/Documents/GitHub/cBank_capacitor/src/main.ts */"./src/main.ts");
 
 
 /***/ })

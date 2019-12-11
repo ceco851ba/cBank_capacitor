@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: 'transaction-details-page',
     loadChildren: () => import('./pages/transaction-details-page/transaction-details-page.module').then( m => m.TransactionDetailsPagePageModule)
+  },
+  {
+    path: 'qrgen',
+    loadChildren: () => import('./pages/qrgen/qrgen.module').then( m => m.QRgenPageModule)
   }
 ];
 @NgModule({
