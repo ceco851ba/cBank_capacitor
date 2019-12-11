@@ -50,6 +50,13 @@ export class Tab3Page {
       return false;
     }
   }
+
+  validAmount() {
+    return this.profile.userBalance-this.amount > 0 && this.amount > 1 ;
+
+  }
+  
+  ////////DOPLIT VALIDATOR  pre input 
 ////////////DOPLNIT PRE OSTATNE VSTUPNE DATA ///////////
 
 
@@ -84,9 +91,7 @@ export class Tab3Page {
     return transID + 1;
   }
 
-  validAmount() {
-    return this.profile.userBalance-this.amount > 0;
-  }
+  
 
   CreateNewTransactionButtonOnclick(){
     let transId = this.transactionIdGenerator();
