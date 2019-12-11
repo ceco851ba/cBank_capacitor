@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class QRgenPage implements OnInit {
   qrCodeText: string = '';
   receiverId: number = null;
+  //pridat ostatne 
   constructor() { }
 
   ngOnInit() {
@@ -16,6 +17,7 @@ export class QRgenPage implements OnInit {
   generateQR() {
     const finalObject = {
       receiverId: this.receiverId,
+      //pridat ostatne 
     }
     this.qrCodeText=JSON.stringify(finalObject);
   }

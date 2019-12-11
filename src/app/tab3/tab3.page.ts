@@ -24,6 +24,8 @@ export class Tab3Page {
   message:string =null;
   amount:number =null;
 
+  ibanColor: string = "danger";
+
   
   constructor(private barcodeScanner: BarcodeScanner, private navController: NavController,private storage: Storage,private toastController: ToastController) 
   {
@@ -36,6 +38,22 @@ export class Tab3Page {
     });
   }
 
+//////////////// VALIDATORY ///////////
+  ibanUpdated() {
+    console.log("Iban checked");
+    if(this.receiverIBAN !== null && this.receiverIBAN.match(/[A-Z]{2}[0-9]{20,30}/g)) {
+      console.log("work");
+      this.ibanColor = "primary";
+      return true;
+    } else {
+      this.ibanColor = "danger";
+      return false;
+    }
+  }
+////////////DOPLNIT PRE OSTATNE VSTUPNE DATA ///////////
+
+
+///////////////////////////////////////////////////////
   async presentToast2(data) {
     const toast = await this.toastController.create({
       message: JSON.stringify(data),
@@ -72,7 +90,7 @@ export class Tab3Page {
     let transId = this.transactionIdGenerator();
     let sendId = this.profile.userId;
     console.log("Send new transaction btn clicked! transaction id: "+ transId);
-    if(this.receiverId !== null && this.amount !== null && this.receiverIBAN !== null && this.receiverName !== null ){
+    if(this.ibanUpdated() && this.receiverId !== null && this.amount !== null && this.receiverIBAN !== null && this.receiverName !== null ){
       this.TransactionsList.push(new MyTransaction().generateTransaction(transId, sendId, this.receiverId,this.senderIBAN,this.receiverIBAN,this.receiverName,this.amount, this.transactionCategory,this.message,Date.now()));
       this.storage.set("transactions", JSON.stringify(this.TransactionsList));
       this.profile.userBalance = this.profile.userBalance - this.amount;
@@ -95,9 +113,19 @@ public generateTransaction(         ////
   //////////////////////////////////    ), */
 
   else{
-    
-      this.presentToast("Please fill all required information")
+      
+      this.presentToast(`${this.getFinalMissingData()}`);
     }
+
+
+  }
+
+  getFinalMissingData(): string {
+    let finalString = '';
+    if(!this.ibanUpdated()) {
+      finalString+= ' missing IBAN '
+    }
+    return finalString;
   }
 
 

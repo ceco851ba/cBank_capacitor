@@ -14,8 +14,8 @@
                 <ion-input placeholder="Required" type = "number" min="0" max="10"   [(ngModel)] = "receiverId" required></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label  color="danger" position="floating">Reciever IBAN</ion-label>
-                <ion-input placeholder="Reciever IBAN Required!" autocapitalize="characters" type = "text" min="15" max="32"   [(ngModel)] = "receiverIBAN" required></ion-input>
+                <ion-label  [color]="ibanColor" position="floating">Reciever IBAN</ion-label>
+                <ion-input (ionChange)="ibanUpdated()" placeholder="Reciever IBAN Required!" autocapitalize="characters" type = "text" min="15" max="32"   [(ngModel)] = "receiverIBAN" required></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label  color="danger" position="floating">Reciever Name</ion-label>
