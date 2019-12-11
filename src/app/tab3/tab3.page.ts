@@ -84,13 +84,15 @@ export class Tab3Page {
     return transID + 1;
   }
 
-
+  validAmount() {
+    return this.profile.userBalance-this.amount > 0;
+  }
 
   CreateNewTransactionButtonOnclick(){
     let transId = this.transactionIdGenerator();
     let sendId = this.profile.userId;
     console.log("Send new transaction btn clicked! transaction id: "+ transId);
-    if(this.ibanUpdated() && this.receiverId !== null && this.amount !== null && this.receiverIBAN !== null && this.receiverName !== null ){
+    if(this.validAmount() && this.ibanUpdated() && this.receiverId !== null && this.amount !== null && this.receiverIBAN !== null && this.receiverName !== null ){
       this.TransactionsList.push(new MyTransaction().generateTransaction(transId, sendId, this.receiverId,this.senderIBAN,this.receiverIBAN,this.receiverName,this.amount, this.transactionCategory,this.message,Date.now()));
       this.storage.set("transactions", JSON.stringify(this.TransactionsList));
       this.profile.userBalance = this.profile.userBalance - this.amount;
@@ -124,6 +126,9 @@ public generateTransaction(         ////
     let finalString = '';
     if(!this.ibanUpdated()) {
       finalString+= ' missing IBAN '
+    }
+    if(!this.validAmount()) {
+      finalString+= ' invalid Amount '
     }
     return finalString;
   }
