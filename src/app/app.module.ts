@@ -10,13 +10,14 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Storage } from '@ionic/storage';
 import { User } from './user';
 import { MyTransaction } from './my-transaction';
-
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule,
+    Ng2GoogleChartsModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot({

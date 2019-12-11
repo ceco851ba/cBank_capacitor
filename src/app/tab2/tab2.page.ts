@@ -13,7 +13,7 @@ import { MyTransaction } from '../my-transaction';
 export class Tab2Page {
   TransactionsList : MyTransaction[] = new Array ();
   profile:User = new User();
-
+  
   constructor(private storage: Storage, private navController: NavController) {
 
     this.storage.get('user').then((val) => {

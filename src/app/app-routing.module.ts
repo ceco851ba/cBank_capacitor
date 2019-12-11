@@ -17,6 +17,10 @@ const routes: Routes = [
   {
     path: 'qrgen',
     loadChildren: () => import('./pages/qrgen/qrgen.module').then( m => m.QRgenPageModule)
+  },
+  {
+    path: 'chart',
+    loadChildren: () => import('./pages/chart/chart.module').then( m => m.ChartPageModule)
   }
 ];
 @NgModule({

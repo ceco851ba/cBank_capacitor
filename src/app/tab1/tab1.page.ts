@@ -36,6 +36,9 @@ export class Tab1Page {
   gotoQRgenButtonOnclick() {
     this.navController.navigateForward("qrgen");
   }
+  gotoChartButtonOnclick() {
+    this.navController.navigateForward("chart");
+  }
   ionViewDidEnter() {
     this.refreshOnClick();
   }

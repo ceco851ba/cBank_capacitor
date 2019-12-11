@@ -11,7 +11,7 @@
           <ion-card-content>
             <ion-item>
                 <ion-label  [color]="ibanColor" position="floating">Reciever IBAN</ion-label>
-                <ion-input (ionChange)="ibanUpdated()" [color]="ibanColor"  autocapitalize="characters"   [(ngModel)] = "receiverIBAN" required></ion-input>
+                <ion-input (ionChange)="ibanUpdated()" [color]="ibanColor"  autocapitalize="characters" max="32"   [(ngModel)] = "receiverIBAN" required></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label  [color]="nameColor"  position="floating">Reciever Name</ion-label>
