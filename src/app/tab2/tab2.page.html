@@ -25,7 +25,7 @@
                 <ion-label  floating>Amount:</ion-label>
               <ion-text><ion-text color="danger" class= "negativeTransaction"> - {{transaction.amount}}</ion-text> </ion-text>
             </ion-item>
-            <ion-item *ngIf="transaction.recieverId == profile.userId" >
+            <ion-item *ngIf="transaction.senderId > profile.userId" >
                 <ion-icon color="success" name="logo-usd"></ion-icon>
                 <ion-label  floating>Amount:</ion-label>
                 <ion-text> <ion-text color="success" class = "positiveTransaction"> + {{transaction.amount}}</ion-text></ion-text>

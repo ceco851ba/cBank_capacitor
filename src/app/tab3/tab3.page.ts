@@ -16,17 +16,16 @@ export class Tab3Page {
   
   TransactionsList : MyTransaction[] = new Array ();
   profile:User = new User();
-  receiverId:number =null;
+  receiverId:number = 0; // PLATBA --> ID:0 prijem ID:1
   transactionCategory:string =null;
   senderIBAN: string ='SK5217992356436464634643'; //my default IBAN
   receiverIBAN: string =null;
   receiverName: string =null;
   message:string =null;
   amount:number =null;
-
   ibanColor: string = "danger";
-
-  
+  nameColor: string = "danger";
+  amountColor: string ="danger";
   constructor(private barcodeScanner: BarcodeScanner, private navController: NavController,private storage: Storage,private toastController: ToastController) 
   {
     this.storage.get('user').then((val) => {
@@ -41,21 +40,51 @@ export class Tab3Page {
 //////////////// VALIDATORY ///////////
   ibanUpdated() {
     console.log("Iban checked");
-    if(this.receiverIBAN !== null && this.receiverIBAN.match(/[A-Z]{2}[0-9]{20,30}/g)) {
-      console.log("work");
+    if(this.receiverIBAN !== null && this.receiverIBAN.match(/[A-Z]{2}[0-9]{15,32}/g)) {    ////IBAN STANDARD ACCORDING TO iban.com/structure
+      console.log("IBAN OK");
       this.ibanColor = "primary";
       return true;
     } else {
       this.ibanColor = "danger";
+      console.log("IBAN False");
       return false;
+      
     }
   }
 
-  validAmount() {
-    return this.profile.userBalance-this.amount > 0 && this.amount > 1 ;
+  receivernameUpdated() {
+    if(this.receiverName !== null && this.receiverName.match(/[A-Z]{1,20}/g)) {
+    console.log("NAME OK");
+    this.nameColor = "primary";
+    return true;
+    } else {
+    this.nameColor = "danger";
+    console.log("Name False");
+    return false;
+    }
+  }
 
+///  validAmount() {
+ //   return this.profile.userBalance-this.amount > 0 && this.amount > 1 ;
+ // }
+
+ validAmount() {
+  if(this.amount !== null && this.profile.userBalance-this.amount > 0 && this.amount > 1)
+  {
+  console.log("amount OK");
+  this.amountColor = "primary";
+  return true;
+  }
+  else
+  {
+    this.amountColor = "danger";
+    console.log("amount False");
+    return false;
   }
   
+}
+  
+ 
   ////////DOPLIT VALIDATOR  pre input 
 ////////////DOPLNIT PRE OSTATNE VSTUPNE DATA ///////////
 
@@ -97,7 +126,7 @@ export class Tab3Page {
     let transId = this.transactionIdGenerator();
     let sendId = this.profile.userId;
     console.log("Send new transaction btn clicked! transaction id: "+ transId);
-    if(this.validAmount() && this.ibanUpdated() && this.receiverId !== null && this.amount !== null && this.receiverIBAN !== null && this.receiverName !== null ){
+    if( this.receivernameUpdated() && this.ibanUpdated() && this.validAmount()&& this.receiverId !== null && this.amount !== null && this.receiverIBAN !== null && this.receiverName !== null ){
       this.TransactionsList.push(new MyTransaction().generateTransaction(transId, sendId, this.receiverId,this.senderIBAN,this.receiverIBAN,this.receiverName,this.amount, this.transactionCategory,this.message,Date.now()));
       this.storage.set("transactions", JSON.stringify(this.TransactionsList));
       this.profile.userBalance = this.profile.userBalance - this.amount;
@@ -130,10 +159,13 @@ public generateTransaction(         ////
   getFinalMissingData(): string {
     let finalString = '';
     if(!this.ibanUpdated()) {
-      finalString+= ' missing IBAN '
+      finalString+= ' Invalid IBAN '
     }
     if(!this.validAmount()) {
       finalString+= ' invalid Amount '
+    }
+    if(!this.receivernameUpdated()){
+      finalString+= ' invalid Name' 
     }
     return finalString;
   }

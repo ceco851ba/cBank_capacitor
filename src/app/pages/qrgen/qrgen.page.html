@@ -10,9 +10,25 @@
       <ion-label  color="danger" position="floating">Reciever ID</ion-label>
       <ion-input placeholder="Required" type = "number" min="0" max="10"   [(ngModel)] = "receiverId" required></ion-input>
   </ion-item>
-  <ion-button (click)="generateQR()">
+  <ion-item>
+      <ion-label  [color]="ibanColor" position="floating">Reciever IBAN</ion-label>
+      <ion-input (ionChange)="ibanUpdated()" placeholder="Reciever IBAN Required!" autocapitalize="characters" type = "text" min="15" max="32"   [(ngModel)] = "receiverIBAN" required></ion-input>
+  </ion-item>
+  <ion-item>
+      <ion-label  color="danger" position="floating">Reciever Name</ion-label>
+      <ion-input type = "text" placeholder="Reciever Name Required!" [(ngModel)] = "receiverName" required></ion-input>
+  </ion-item> 
+  <ion-item>
+      <ion-label color="danger" position="floating"> Amount</ion-label>
+      <ion-input placeholder="Amount Required!" type = "number" min="0" max="1000"   [(ngModel)] = "amount" required min="0" max="1000"></ion-input>
+  </ion-item>
+
+  <ion-button ion-button expand="block" (click)="generateQR()">
     Generate QR
   </ion-button>
+  <ion-button ion-button expand="block" (click)="returnToProfileButtonOnclick()">Return to Profile</ion-button> 
+
+
   <ngx-qrcode 
     [qrc-value] = "qrCodeText"
     qrc-class = "aclass"
