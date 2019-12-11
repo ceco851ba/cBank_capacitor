@@ -4,6 +4,7 @@ import { User } from '../user';
 import { Storage } from '@ionic/storage';
 import { MyTransaction } from '../my-transaction';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { TouchSequence } from 'selenium-webdriver';
 
 
 @Component({
@@ -46,6 +47,9 @@ export class Tab3Page {
   scanQR() {
     this.barcodeScanner.scan().then(barcodeData => {
       this.presentToast2(barcodeData);
+      const qrData = JSON.parse(barcodeData.text);
+      this.receiverId = qrData.receiverId || null;
+      // doplnit ostatne data 
      }).catch(err => {
         this.presentToast2(err);
          console.log('Error', err);
