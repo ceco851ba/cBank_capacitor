@@ -3649,7 +3649,7 @@ module.exports = Array.isArray || function (arr) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>QRgen</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n\n  <ion-item>\n      <ion-label  color=\"danger\" position=\"floating\">Reciever ID</ion-label>\n      <ion-input placeholder=\"Required\" type = \"number\" min=\"0\" max=\"10\"   [(ngModel)] = \"receiverId\" required></ion-input>\n  </ion-item>\n  <ion-button (click)=\"generateQR()\">\n    Generate QR\n  </ion-button>\n  <ngx-qrcode \n    [qrc-value] = \"qrCodeText\"\n    qrc-class = \"aclass\"\n    qrc-errorCorrectionLevel = \"L\">\n  </ngx-qrcode>\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>QRgen</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n\n    <ion-item>\n        <ion-label  [color]=\"ibanColor\" position=\"floating\">Reciever IBAN</ion-label>\n        <ion-input (ionChange)=\"ibanUpdated()\" [color]=\"ibanColor\"  autocapitalize=\"characters\"   [(ngModel)] = \"receiverIBAN\" required></ion-input>\n    </ion-item>\n    <ion-item>\n        <ion-label  [color]=\"nameColor\"  position=\"floating\">Reciever Name</ion-label>\n        <ion-input (ionChange)=\"receivernameUpdated()\" [color]=\"nameColor\" [(ngModel)] = \"receiverName\" required></ion-input>\n    </ion-item>\n    <ion-item>\n        <ion-label  [color]=\"amountColor\" position=\"floating\">  Amount </ion-label>\n        <ion-input (ionChange)=\"validAmount()\" [color]=\"amountColor\"   [(ngModel)] = \"amount\"></ion-input>\n    </ion-item>\n\n\n  <ion-button ion-button expand=\"block\" (click)=\"generateQR()\">\n    Generate QR\n  </ion-button>\n  <ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n\n\n  <ngx-qrcode \n    [qrc-value] = \"qrCodeText\"\n    qrc-class = \"aclass\"\n    qrc-errorCorrectionLevel = \"L\">\n  </ngx-qrcode>\n</ion-content>\n"
 
 /***/ }),
 
@@ -3758,29 +3758,110 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QRgenPage", function() { return QRgenPage; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+
 
 
 let QRgenPage = class QRgenPage {
-    constructor() {
+    //pridat ostatne 
+    constructor(navController, toastController) {
+        this.navController = navController;
+        this.toastController = toastController;
         this.qrCodeText = '';
-        this.receiverId = null;
+        //receiverId: number = 0; // PLATBA --> ID:0 prijem ID:1
+        this.receiverIBAN = null;
+        this.receiverName = null;
+        this.amount = null;
+        this.ibanColor = "danger";
+        this.nameColor = "danger";
+        this.amountColor = "danger";
     }
     ngOnInit() {
     }
+    //////////////// VALIDATORY ///////////
+    ibanUpdated() {
+        console.log("Iban checked");
+        if (this.receiverIBAN !== null && this.receiverIBAN.match(/^[A-Z]{2}[0-9]{15,32}$/g)) { ////IBAN STANDARD ACCORDING TO iban.com/structure
+            console.log("IBAN OK");
+            this.ibanColor = "primary";
+            return true;
+        }
+        else {
+            this.ibanColor = "danger";
+            console.log("IBAN False");
+            return false;
+        }
+    }
+    receivernameUpdated() {
+        if (this.receiverName !== null && this.receiverName.match(/[A-z]{1,20}/g)) {
+            console.log("NAME OK");
+            this.nameColor = "primary";
+            return true;
+        }
+        else {
+            this.nameColor = "danger";
+            console.log("Name False");
+            return false;
+        }
+    }
+    ///  validAmount() {
+    //   return this.profile.userBalance-this.amount > 0 && this.amount > 1 ;
+    // }
+    validAmount() {
+        if (this.amount !== null && this.amount > 0) {
+            console.log("amount OK");
+            this.amountColor = "primary";
+            return true;
+        }
+        else {
+            this.amountColor = "danger";
+            console.log("amount False");
+            return false;
+        }
+    }
+    ///////////////////////////////////////////////////////
     generateQR() {
-        const finalObject = {
-            receiverId: this.receiverId,
-        };
-        this.qrCodeText = JSON.stringify(finalObject);
+        if (this.receivernameUpdated() && this.ibanUpdated() && this.validAmount()) {
+            const finalObject = {
+                //receiverId: this.receiverId,
+                receiverIBAN: this.receiverIBAN,
+                receiverName: this.receiverName,
+                amount: this.amount,
+                message: 'From QR Code'
+            };
+            this.qrCodeText = JSON.stringify(finalObject);
+            console.log("QR OK");
+            this.presentToast("QR code generated sucessfully");
+        }
+        else {
+            console.log("QR FAIL");
+            this.presentToast("QR CODE ERROR - Check input values");
+        }
+    }
+    returnToProfileButtonOnclick() {
+        this.navController.navigateRoot("tabs/tab1");
+    }
+    presentToast(toastMessage) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            const toast = yield this.toastController.create({
+                message: toastMessage,
+                duration: 10000
+            });
+            toast.present();
+        });
     }
 };
+QRgenPage.ctorParameters = () => [
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"] },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"] }
+];
 QRgenPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-qrgen',
         template: __webpack_require__(/*! raw-loader!./qrgen.page.html */ "./node_modules/raw-loader/index.js!./src/app/pages/qrgen/qrgen.page.html"),
         styles: [__webpack_require__(/*! ./qrgen.page.scss */ "./src/app/pages/qrgen/qrgen.page.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])
 ], QRgenPage);
 
 

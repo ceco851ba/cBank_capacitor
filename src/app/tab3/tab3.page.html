@@ -11,25 +11,25 @@
           <ion-card-content>
             <ion-item>
                 <ion-label  [color]="ibanColor" position="floating">Reciever IBAN</ion-label>
-                <ion-input (ionChange)="ibanUpdated()" [color]="ibanColor" placeholder="Reciever IBAN Required!" autocapitalize="characters" type = "text" min="15" max="32"   [(ngModel)] = "receiverIBAN" required></ion-input>
+                <ion-input (ionChange)="ibanUpdated()" [color]="ibanColor"  autocapitalize="characters"   [(ngModel)] = "receiverIBAN" required></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label  [color]="nameColor"  position="floating">Reciever Name</ion-label>
-                <ion-input (ionChange)="receivernameUpdated()" [color]="nameColor" placeholder="Reciever Name Required!" [(ngModel)] = "receiverName" required></ion-input>
+                <ion-input (ionChange)="receivernameUpdated()" [color]="nameColor" [(ngModel)] = "receiverName" required></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label  color="primary" position="floating"> Message</ion-label>
-                <ion-input placeholder="Message (optional)" type = "text"  [(ngModel)] = "message" ></ion-input>
-            </ion-item>
-
-            <ion-item>
-                <ion-label color="danger" position="floating"> Amount</ion-label>
-                <ion-input (ionChange)="validAmount()" [color]="amountColor"   [(ngModel)] = "amount" required min="0" max="1000"></ion-input>
+                <ion-label  color="primary" position="floating"> Message (optional)</ion-label>
+                <ion-input  type = "text"  [(ngModel)] = "message" ></ion-input>
             </ion-item>
 
             <ion-item>
-                <ion-label  color="primary" position="floating"> Transaction Category</ion-label>
-                <ion-input placeholder="Transaction Category (optional)" type = "text"  [(ngModel)] = "transactionCategory" ></ion-input>
+                <ion-label  [color]="amountColor" position="floating">  Amount </ion-label>
+                <ion-input (ionChange)="validAmount()" [color]="amountColor"   [(ngModel)] = "amount"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label  color="primary" position="floating"> Transaction Category (optional)</ion-label>
+                <ion-input  type = "text"  [(ngModel)] = "transactionCategory" ></ion-input>
             </ion-item>
           
           </ion-card-content>

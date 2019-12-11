@@ -614,46 +614,56 @@ var AppModule = /** @class */ (function () {
         this.CreateTransactionList();
     }
     AppModule.prototype.GenerateProfile = function () {
-        this.profile.userId = 0;
-        this.profile.userTitle = 'Bc.';
-        this.profile.userName = 'Michal';
-        this.profile.userSurname = 'Ceconik';
-        this.profile.userTitle2 = '';
-        this.profile.userIBAN = 'SK9221162518545481819831';
-        this.profile.userBalance = 10000;
-        this.profile.userAddress = 'mojaAdresa';
-        this.profile.userCity = 'Bratislava';
-        this.profile.userEmail = 'ceco851ba@gmail.com';
-        this.profile.userPhonenum = '0909123123';
-        this.storage.set("user", JSON.stringify(this.profile));
-        this.profile = new _user__WEBPACK_IMPORTED_MODULE_10__["User"]();
+        var _this = this;
         this.storage.get('user').then(function (val) {
-            console.log('Your json is', val);
-            var usr = new _user__WEBPACK_IMPORTED_MODULE_10__["User"]();
-            usr = JSON.parse(val);
-            console.log(usr);
+            if (val === null) {
+                _this.profile.userId = 0;
+                _this.profile.userTitle = 'Bc.';
+                _this.profile.userName = 'Michal';
+                _this.profile.userSurname = 'Ceconik';
+                _this.profile.userTitle2 = '';
+                _this.profile.userIBAN = 'SK9221162518545481819831';
+                _this.profile.userBalance = 10000;
+                _this.profile.userAddress = 'mojaAdresa';
+                _this.profile.userCity = 'Bratislava';
+                _this.profile.userEmail = 'ceco851ba@gmail.com';
+                _this.profile.userPhonenum = '0909123123';
+                _this.storage.set("user", JSON.stringify(_this.profile));
+            }
+            else {
+                console.log('Your json is', val);
+                var usr = new _user__WEBPACK_IMPORTED_MODULE_10__["User"]();
+                usr = JSON.parse(val);
+                _this.profile = usr;
+                console.log(usr);
+            }
         });
         console.log(this.profile);
     };
     AppModule.prototype.CreateTransactionList = function () {
-        this.TransactionsList.push(new _my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]().generateTransaction(0, //trans ID
-        1, // receiver ID  r/s 1/0 --> -  
-        0, // sender ID    r/s 0/1 --> +
-        'SK5217992356436464634643', //sender IBAN ///****default User IBAN */
-        'SK7364546456454545454544', //receiver IBAN
-        'Billa Slovensko', //receiver name
-        100, // amount
-        "Obchod", // Transaction type
-        "Billa", // message
-        1575547562031 // timestamp ISO 8602
-        ), new _my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]().generateTransaction(1, 1, 0, 'SK5217992356436464634643', 'SK521799134t4t2735342558', 'Lukoil Slovakia', 300, "Auto", "PHM", 1575547568031), new _my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]().generateTransaction(3, 0, 1, 'SK4465436567568687878787', 'SK5217992356436464634643', 'xxx', 355, "ine", "zaloha", 1575677560031), new _my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]().generateTransaction(2, 1, 0, 'SK5217992356436464634643', 'SK4346657575454534634899', 'Alza', 100, "Obchod", "stotabletovtyzdenne", 1575547560031));
-        // new MyTransaction().generateTransaction(0,1,0,'NL56INGB7830770891','SK5217991326862735342558',100,"Obchod","message",1572706800),
-        this.storage.set("transactions", JSON.stringify(this.TransactionsList));
+        var _this = this;
         this.storage.get('transactions').then(function (val) {
-            console.log('Your json is', val);
-            var usr = new Array(_my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]);
-            usr = JSON.parse(val);
-            console.log(usr);
+            if (val === null) {
+                _this.TransactionsList.push(new _my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]().generateTransaction(0, //trans ID
+                1, // receiver ID  r/s 1/0 --> -  
+                0, // sender ID    r/s 0/1 --> +
+                'SK5217992356436464634643', //sender IBAN ///****default User IBAN */
+                'SK7364546456454545454544', //receiver IBAN
+                'Billa Slovensko', //receiver name
+                100, // amount
+                "Obchod", // Transaction type
+                "Billa", // message
+                1575547562031 // timestamp ISO 8602
+                ), new _my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]().generateTransaction(1, 1, 0, 'SK5217992356436464634643', 'SK521799134t4t2735342558', 'Lukoil Slovakia', 300, "Auto", "PHM", 1575547568031), new _my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]().generateTransaction(3, 0, 1, 'SK4465436567568687878787', 'SK5217992356436464634643', 'xxx', 355, "ine", "zaloha", 1575677560031), new _my_transaction__WEBPACK_IMPORTED_MODULE_11__["MyTransaction"]().generateTransaction(2, 1, 0, 'SK5217992356436464634643', 'SK4346657575454534634899', 'Alza', 100, "Obchod", "stotabletovtyzdenne", 1575547560031));
+                // new MyTransaction().generateTransaction(0,1,0,'NL56INGB7830770891','SK5217991326862735342558',100,"Obchod","message",1572706800),
+                _this.storage.set("transactions", JSON.stringify(_this.TransactionsList));
+            }
+            else {
+                console.log('Your json is', val);
+                var usr = JSON.parse(val);
+                console.log(usr);
+                _this.TransactionsList = usr;
+            }
         });
     };
     AppModule.ctorParameters = function () { return [

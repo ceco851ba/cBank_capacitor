@@ -69,7 +69,7 @@ var BarcodeScanner = /** @class */ (function (_super) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n    <ion-toolbar>\n      <ion-item>\n        <ion-title align=\"center\" style=\"font-weight: bold; color:rgb(24, 0, 163);\">   New Transaction  </ion-title>\n      </ion-item>\n    </ion-toolbar>\n  </ion-header>\n<ion-content>\n    <ion-content>\n        <ion-card>\n          <ion-card-content>\n            <ion-item>\n                <ion-label  color=\"danger\" position=\"floating\">Reciever ID</ion-label>\n                <ion-input placeholder=\"Required\" type = \"number\" min=\"0\" max=\"10\"   [(ngModel)] = \"receiverId\" required></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label  color=\"danger\" position=\"floating\">Reciever IBAN</ion-label>\n                <ion-input placeholder=\"Reciever IBAN Required!\" autocapitalize=\"characters\" type = \"text\" min=\"15\" max=\"32\"   [(ngModel)] = \"receiverIBAN\" required></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label  color=\"danger\" position=\"floating\">Reciever Name</ion-label>\n                <ion-input type = \"text\" placeholder=\"Reciever Name Required!\" [(ngModel)] = \"receiverName\" required></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label  color=\"primary\" position=\"floating\"> Message</ion-label>\n                <ion-input placeholder=\"Message (optional)\" type = \"text\"  [(ngModel)] = \"message\" ></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label color=\"danger\" position=\"floating\"> Amount</ion-label>\n                <ion-input placeholder=\"Amount Required!\" type = \"number\" min=\"0\" max=\"1000\"   [(ngModel)] = \"amount\" required min=\"0\" max=\"1000\"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label  color=\"primary\" position=\"floating\"> Transaction Category</ion-label>\n                <ion-input placeholder=\"Transaction Category (optional)\" type = \"text\"  [(ngModel)] = \"transactionCategory\" ></ion-input>\n            </ion-item>\n          \n          </ion-card-content>\n        </ion-card>\n              \n              <ion-card>\n                <ion-button color=\"danger\"  ion-button expand=\"block\" (click)=\"CreateNewTransactionButtonOnclick()\">Send Transaction</ion-button> \n                <ion-button ion-button expand=\"block\" (click)=\"scanQR()\">Scan QR</ion-button> \n                <ion-button ion-button expand=\"block\" (click)=\"gotoTransButtonOnclick()\">Return to Transactins</ion-button> \n                <ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n              </ion-card>\n            \n      </ion-content>\n\n\n"
+module.exports = "<ion-header>\n    <ion-toolbar>\n      <ion-item>\n        <ion-title align=\"center\" style=\"font-weight: bold; color:rgb(24, 0, 163);\">   New Transaction  </ion-title>\n      </ion-item>\n    </ion-toolbar>\n  </ion-header>\n<ion-content>\n    <ion-content>\n        <ion-card>\n          <ion-card-content>\n            <ion-item>\n                <ion-label  [color]=\"ibanColor\" position=\"floating\">Reciever IBAN</ion-label>\n                <ion-input (ionChange)=\"ibanUpdated()\" [color]=\"ibanColor\"  autocapitalize=\"characters\"   [(ngModel)] = \"receiverIBAN\" required></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label  [color]=\"nameColor\"  position=\"floating\">Reciever Name</ion-label>\n                <ion-input (ionChange)=\"receivernameUpdated()\" [color]=\"nameColor\" [(ngModel)] = \"receiverName\" required></ion-input>\n            </ion-item>\n            <ion-item>\n                <ion-label  color=\"primary\" position=\"floating\"> Message (optional)</ion-label>\n                <ion-input  type = \"text\"  [(ngModel)] = \"message\" ></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label  [color]=\"amountColor\" position=\"floating\">  Amount </ion-label>\n                <ion-input (ionChange)=\"validAmount()\" [color]=\"amountColor\"   [(ngModel)] = \"amount\"></ion-input>\n            </ion-item>\n\n            <ion-item>\n                <ion-label  color=\"primary\" position=\"floating\"> Transaction Category (optional)</ion-label>\n                <ion-input  type = \"text\"  [(ngModel)] = \"transactionCategory\" ></ion-input>\n            </ion-item>\n          \n          </ion-card-content>\n        </ion-card>\n              \n              <ion-card>\n                <ion-button color=\"danger\"  ion-button expand=\"block\" (click)=\"CreateNewTransactionButtonOnclick()\">Send Transaction</ion-button> \n                <ion-button ion-button expand=\"block\" (click)=\"scanQR()\">Scan QR</ion-button> \n                <ion-button ion-button expand=\"block\" (click)=\"gotoTransButtonOnclick()\">Return to Transactins</ion-button> \n                <ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n              </ion-card>\n            \n      </ion-content>\n\n\n"
 
 /***/ }),
 
@@ -165,13 +165,16 @@ var Tab3Page = /** @class */ (function () {
         this.toastController = toastController;
         this.TransactionsList = new Array();
         this.profile = new _user__WEBPACK_IMPORTED_MODULE_3__["User"]();
-        this.receiverId = null;
+        this.receiverId = 0; // PLATBA --> ID:0 prijem ID:1
         this.transactionCategory = null;
         this.senderIBAN = 'SK5217992356436464634643'; //my default IBAN
         this.receiverIBAN = null;
         this.receiverName = null;
         this.message = null;
         this.amount = null;
+        this.ibanColor = "danger";
+        this.nameColor = "danger";
+        this.amountColor = "danger";
         this.storage.get('user').then(function (val) {
             _this.profile = JSON.parse(val);
         });
@@ -179,6 +182,48 @@ var Tab3Page = /** @class */ (function () {
             _this.TransactionsList = JSON.parse(val);
         });
     }
+    //////////////// VALIDATORY ///////////
+    Tab3Page.prototype.ibanUpdated = function () {
+        console.log("Iban checked");
+        if (this.receiverIBAN !== null && this.receiverIBAN.match(/^[A-Z]{2}[0-9]{15,32}$/g)) { ////IBAN STANDARD ACCORDING TO iban.com/structure
+            console.log("IBAN OK");
+            this.ibanColor = "primary";
+            return true;
+        }
+        else {
+            this.ibanColor = "danger";
+            console.log("IBAN False");
+            return false;
+        }
+    };
+    Tab3Page.prototype.receivernameUpdated = function () {
+        if (this.receiverName !== null && this.receiverName.match(/[A-z]{1,20}/g)) {
+            console.log("NAME OK");
+            this.nameColor = "primary";
+            return true;
+        }
+        else {
+            this.nameColor = "danger";
+            console.log("Name False");
+            return false;
+        }
+    };
+    ///  validAmount() {
+    //   return this.profile.userBalance-this.amount > 0 && this.amount > 1 ;
+    // }
+    Tab3Page.prototype.validAmount = function () {
+        if (this.amount !== null && this.profile.userBalance - this.amount > 0 && this.amount > 0) {
+            console.log("amount OK");
+            this.amountColor = "primary";
+            return true;
+        }
+        else {
+            this.amountColor = "danger";
+            console.log("amount False");
+            return false;
+        }
+    };
+    ///////////////////////////////////////////////////////
     Tab3Page.prototype.presentToast2 = function (data) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
             var toast;
@@ -196,18 +241,23 @@ var Tab3Page = /** @class */ (function () {
             });
         });
     };
+    //////////////////////////////////QR CODE SCAN/////////////////
     Tab3Page.prototype.scanQR = function () {
         var _this = this;
         this.barcodeScanner.scan().then(function (barcodeData) {
-            _this.presentToast2(barcodeData);
+            //this.presentToast2(barcodeData);  ////////////////
             var qrData = JSON.parse(barcodeData.text);
-            _this.receiverId = qrData.receiverId || null;
-            // doplnit ostatne data 
+            // this.receiverId = qrData.receiverId || null;
+            _this.receiverIBAN = qrData.receiverIBAN || null;
+            _this.receiverName = qrData.receiverName || null;
+            _this.amount = qrData.amount || null;
+            _this.message = qrData.message || null;
         }).catch(function (err) {
             _this.presentToast2(err);
-            console.log('Error', err);
+            console.log('QR Error', err);
         });
     };
+    /////////////////////////////////////////////////////////////////
     Tab3Page.prototype.transactionIdGenerator = function () {
         var transID = 0;
         this.TransactionsList.forEach(function (transaction) {
@@ -221,12 +271,13 @@ var Tab3Page = /** @class */ (function () {
         var transId = this.transactionIdGenerator();
         var sendId = this.profile.userId;
         console.log("Send new transaction btn clicked! transaction id: " + transId);
-        if (this.receiverId !== null && this.amount !== null && this.receiverIBAN !== null && this.receiverName !== null) {
+        if (this.receivernameUpdated() && this.ibanUpdated() && this.validAmount() && this.receiverId !== null && this.amount !== null && this.receiverIBAN !== null && this.receiverName !== null) {
             this.TransactionsList.push(new _my_transaction__WEBPACK_IMPORTED_MODULE_5__["MyTransaction"]().generateTransaction(transId, sendId, this.receiverId, this.senderIBAN, this.receiverIBAN, this.receiverName, this.amount, this.transactionCategory, this.message, Date.now()));
             this.storage.set("transactions", JSON.stringify(this.TransactionsList));
             this.profile.userBalance = this.profile.userBalance - this.amount;
             this.storage.set("user", JSON.stringify(this.profile));
-            this.presentToast("Transaction recieved by the bank.");
+            //this.presentToast("Transaction recieved by the bank.");
+            this.presentToast("" + this.getFinalTransactionOK());
         }
         /*//////////////////////////////////////
         public generateTransaction(         ////
@@ -243,8 +294,27 @@ var Tab3Page = /** @class */ (function () {
             )
           //////////////////////////////////    ), */
         else {
-            this.presentToast("Please fill all required information");
+            this.presentToast("" + this.getFinalMissingData());
         }
+    };
+    Tab3Page.prototype.getFinalMissingData = function () {
+        var finalString = '';
+        if (!this.ibanUpdated()) {
+            finalString += ' Invalid IBAN ';
+        }
+        if (!this.validAmount()) {
+            finalString += ' invalid Amount ';
+        }
+        if (!this.receivernameUpdated()) {
+            finalString += ' invalid Name';
+        }
+        return finalString;
+    };
+    Tab3Page.prototype.getFinalTransactionOK = function () {
+        var finalOKString = 'Transaction received by the bank. Your Account ballance : ';
+        finalOKString += this.profile.userBalance;
+        finalOKString += '€';
+        return finalOKString;
     };
     Tab3Page.prototype.presentToast = function (toastMessage) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
@@ -253,7 +323,7 @@ var Tab3Page = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.toastController.create({
                             message: toastMessage,
-                            duration: 2000
+                            duration: 10000
                         })];
                     case 1:
                         toast = _a.sent();
