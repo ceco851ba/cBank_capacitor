@@ -70,32 +70,37 @@ GenerateProfile(){
 }
 
 CreateTransactionList(){
-  this.TransactionsList.push(
-    new MyTransaction().generateTransaction(
-      0,  //trans ID
-      1,  // receiver ID  r/s 1/0 --> -  
-      0,  // sender ID    r/s 0/1 --> +
-      'SK5217992356436464634643', //sender IBAN ///****default User IBAN */
-      'SK7364546456454545454544', //receiver IBAN
-      'Billa Slovensko', //receiver name
-      100,  // amount
-      "Obchod", // Transaction type
-      "Billa", // message
-      1575547562031   // timestamp ISO 8602
-      ),
-    new MyTransaction().generateTransaction(1,1,0,'SK5217992356436464634643','SK521799134t4t2735342558','Lukoil Slovakia',300,"Auto","PHM",1575547568031),
-    new MyTransaction().generateTransaction(3,0,1,'SK4465436567568687878787','SK5217992356436464634643','xxx',355,"ine","zaloha",	1575677560031),
-    new MyTransaction().generateTransaction(2,1,0,'SK5217992356436464634643','SK4346657575454534634899','Alza',100,"Obchod","stotabletovtyzdenne",1575547560031),
-
-  );
-  // new MyTransaction().generateTransaction(0,1,0,'NL56INGB7830770891','SK5217991326862735342558',100,"Obchod","message",1572706800),
-  this.storage.set("transactions", JSON.stringify(this.TransactionsList));
-
   this.storage.get('transactions').then((val) => {
-    console.log('Your json is', val);
-    let usr = new Array(MyTransaction);
-    usr = JSON.parse(val);
-    console.log(usr);
+    if(val === null) {
+      this.TransactionsList.push(
+        new MyTransaction().generateTransaction(
+          0,  //trans ID
+          1,  // receiver ID  r/s 1/0 --> -  
+          0,  // sender ID    r/s 0/1 --> +
+          'SK5217992356436464634643', //sender IBAN ///****default User IBAN */
+          'SK7364546456454545454544', //receiver IBAN
+          'Billa Slovensko', //receiver name
+          100,  // amount
+          "Obchod", // Transaction type
+          "Billa", // message
+          1575547562031   // timestamp ISO 8602
+          ),
+        new MyTransaction().generateTransaction(1,1,0,'SK5217992356436464634643','SK521799134t4t2735342558','Lukoil Slovakia',300,"Auto","PHM",1575547568031),
+        new MyTransaction().generateTransaction(3,0,1,'SK4465436567568687878787','SK5217992356436464634643','xxx',355,"ine","zaloha",	1575677560031),
+        new MyTransaction().generateTransaction(2,1,0,'SK5217992356436464634643','SK4346657575454534634899','Alza',100,"Obchod","stotabletovtyzdenne",1575547560031),
+    
+      );
+      // new MyTransaction().generateTransaction(0,1,0,'NL56INGB7830770891','SK5217991326862735342558',100,"Obchod","message",1572706800),
+      this.storage.set("transactions", JSON.stringify(this.TransactionsList));
+    }
+
+    else {
+      console.log('Your json is', val);
+      let usr: Array<MyTransaction> = JSON.parse(val);
+      console.log(usr);
+      this.TransactionsList = usr;
+    }
+    
   });
 
 }
