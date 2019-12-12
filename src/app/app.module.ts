@@ -89,7 +89,7 @@ CreateTransactionList(){
           1575547562031   // timestamp ISO 8602
           ),
         new MyTransaction().generateTransaction(1,1,0,'SK5217992356436464634643','SK521799134t4t2735342558','Lukoil Slovakia',60,"Auto","PHM",1575547568031),
-        new MyTransaction().generateTransaction(2,0,1,'SK4465436567568687878787','SK5217992356436464634643','xxx',355,"ine","zaloha",	1575677560031),
+        new MyTransaction().generateTransaction(2,1,0,'SK4465436567568687878787','SK5217992356436464634643','xxx',355,"ine","zaloha",	1575677560031),
         new MyTransaction().generateTransaction(3,1,0,'SK5217992356436464634643','SK521799134t4t2735342558','Shell Slovakia',58,"Auto","PHM",1575547568033),
         new MyTransaction().generateTransaction(4,1,0,'SK5217992356436464634643','SK4346657575454534634899','Alza',100,"Obchod","stotabletovtyzdenne",1575547560031),
     

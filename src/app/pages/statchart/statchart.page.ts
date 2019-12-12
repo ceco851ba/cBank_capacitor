@@ -27,7 +27,7 @@ export class StatchartPage implements OnInit {
   this.storage.get('transactions').then((val) => {
     this.TransactionsList = JSON.parse(val);
     this.TransactionsList.forEach(transaction => {
-      if (transaction.recieverId != 0 ){   ///Receiver ID null --> outgo transaction 
+    //  if (transaction.recieverId != transaction.senderId ) {   ///
         
         this.TransactionsList.push(transaction);
           
@@ -39,7 +39,7 @@ export class StatchartPage implements OnInit {
           {
             this.chartDataFiltered.set(transaction.transactionCategory,transaction.amount)
           }
-          }  
+          //}  
           });
       this.generatePieChart(this.chartDataFiltered)
           });
