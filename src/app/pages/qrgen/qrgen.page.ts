@@ -54,7 +54,7 @@ receivernameUpdated() {
 // }
 
 validAmount() {
-if(this.amount !== null && this.amount > 0)
+if(this.amount !== null  && this.amount > 0)
 {
 console.log("amount OK");
 this.amountColor = "primary";
@@ -86,14 +86,35 @@ else
     this.presentToast("QR code generated sucessfully")
   }
 
-  else  {
-  console.log("QR FAIL");
-    this.presentToast("QR CODE ERROR - Check input values")
+  else{
+      
+    this.presentToast(`${this.getFinalMissingData()}`);
   }
+
+
 }
+
+getFinalMissingData(): string {
+  let finalString = '';
+  if(!this.ibanUpdated()) {
+    finalString+= ' Invalid IBAN '
+  }
+  if(!this.validAmount()) {
+    finalString+= ' invalid Amount '
+  }
+  if(!this.receivernameUpdated()){
+    finalString+= ' invalid Name' 
+  }
+  
+  
+  return finalString;
+}
+
   returnToProfileButtonOnclick(){
     this.navController.navigateRoot("tabs/tab1");
   }
+
+
 
 
   async presentToast(toastMessage:string) {

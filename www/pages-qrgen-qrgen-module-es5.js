@@ -3649,7 +3649,7 @@ module.exports = Array.isArray || function (arr) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>QRgen</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n\n    <ion-item>\n        <ion-label  [color]=\"ibanColor\" position=\"floating\">Reciever IBAN</ion-label>\n        <ion-input (ionChange)=\"ibanUpdated()\" [color]=\"ibanColor\"  autocapitalize=\"characters\"   [(ngModel)] = \"receiverIBAN\" required></ion-input>\n    </ion-item>\n    <ion-item>\n        <ion-label  [color]=\"nameColor\"  position=\"floating\">Reciever Name</ion-label>\n        <ion-input (ionChange)=\"receivernameUpdated()\" [color]=\"nameColor\" [(ngModel)] = \"receiverName\" required></ion-input>\n    </ion-item>\n    <ion-item>\n        <ion-label  [color]=\"amountColor\" position=\"floating\">  Amount </ion-label>\n        <ion-input (ionChange)=\"validAmount()\" [color]=\"amountColor\"   [(ngModel)] = \"amount\"></ion-input>\n    </ion-item>\n\n  <ion-button ion-button expand=\"block\" (click)=\"generateQR()\">\n    Generate QR\n  </ion-button>\n  <ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n\n  <ngx-qrcode \n    [qrc-value] = \"qrCodeText\"\n    qrc-class = \"aclass\"\n    qrc-errorCorrectionLevel = \"L\">\n  </ngx-qrcode>\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-item>\n        <ion-title align=\"center\" style=\"font-weight: bold; color:rgb(24, 0, 163);\">   QR Code Generator  </ion-title>\n    </ion-item>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n\n    <ion-item>\n        <ion-label  [color]=\"ibanColor\" position=\"floating\">Reciever IBAN</ion-label>\n        <ion-input (ionChange)=\"ibanUpdated()\" [color]=\"ibanColor\"  autocapitalize=\"characters\"   [(ngModel)] = \"receiverIBAN\" required></ion-input>\n    </ion-item>\n    <ion-item>\n        <ion-label  [color]=\"nameColor\"  position=\"floating\">Reciever Name</ion-label>\n        <ion-input (ionChange)=\"receivernameUpdated()\" [color]=\"nameColor\" [(ngModel)] = \"receiverName\" required></ion-input>\n    </ion-item>\n    <ion-item>\n        <ion-label  [color]=\"amountColor\" position=\"floating\">  Amount </ion-label>\n        <ion-input (ionChange)=\"validAmount()\" [color]=\"amountColor\"   [(ngModel)] = \"amount\"></ion-input>\n    </ion-item>\n\n  <ion-button ion-button expand=\"block\" (click)=\"generateQR()\">\n    Generate QR\n  </ion-button>\n  <ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n\n  <ngx-qrcode \n    [qrc-value] = \"qrCodeText\"\n    qrc-class = \"aclass\"\n    qrc-errorCorrectionLevel = \"L\">\n  </ngx-qrcode>\n</ion-content>\n"
 
 /***/ }),
 
@@ -3840,9 +3840,21 @@ var QRgenPage = /** @class */ (function () {
             this.presentToast("QR code generated sucessfully");
         }
         else {
-            console.log("QR FAIL");
-            this.presentToast("QR CODE ERROR - Check input values");
+            this.presentToast("" + this.getFinalMissingData());
         }
+    };
+    QRgenPage.prototype.getFinalMissingData = function () {
+        var finalString = '';
+        if (!this.ibanUpdated()) {
+            finalString += ' Invalid IBAN ';
+        }
+        if (!this.validAmount()) {
+            finalString += ' invalid Amount ';
+        }
+        if (!this.receivernameUpdated()) {
+            finalString += ' invalid Name';
+        }
+        return finalString;
     };
     QRgenPage.prototype.returnToProfileButtonOnclick = function () {
         this.navController.navigateRoot("tabs/tab1");

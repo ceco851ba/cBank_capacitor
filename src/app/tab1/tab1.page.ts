@@ -37,7 +37,7 @@ export class Tab1Page {
     this.navController.navigateForward("qrgen");
   }
   gotoChartButtonOnclick() {
-    this.navController.navigateForward("chart");
+    this.navController.navigateForward("statchart");
   }
   ionViewDidEnter() {
     this.refreshOnClick();

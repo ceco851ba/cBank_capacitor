@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ChartPageRoutingModule } from './chart-routing.module';
 import { ChartPage } from './chart.page';
-import { Ng2GoogleChartsModule } from 'ng2-google-charts';
+//import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
@@ -13,7 +13,6 @@ import { ChartsModule } from 'ng2-charts';
     FormsModule,
     IonicModule,
     ChartPageRoutingModule,
-    Ng2GoogleChartsModule,
     ChartsModule
   ],
   declarations: [ChartPage]

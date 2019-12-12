@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'chart',
     loadChildren: () => import('./pages/chart/chart.module').then( m => m.ChartPageModule)
+  },
+  {
+    path: 'statchart',
+    loadChildren: () => import('./pages/statchart/statchart.module').then( m => m.StatchartPageModule)
   }
 ];
 @NgModule({

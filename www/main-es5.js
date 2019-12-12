@@ -483,6 +483,14 @@ var routes = [
     {
         path: 'qrgen',
         loadChildren: function () { return __webpack_require__.e(/*! import() | pages-qrgen-qrgen-module */ "pages-qrgen-qrgen-module").then(__webpack_require__.bind(null, /*! ./pages/qrgen/qrgen.module */ "./src/app/pages/qrgen/qrgen.module.ts")).then(function (m) { return m.QRgenPageModule; }); }
+    },
+    {
+        path: 'chart',
+        loadChildren: function () { return Promise.all(/*! import() | pages-chart-chart-module */[__webpack_require__.e("default~pages-chart-chart-module~pages-statchart-statchart-module"), __webpack_require__.e("pages-chart-chart-module")]).then(__webpack_require__.bind(null, /*! ./pages/chart/chart.module */ "./src/app/pages/chart/chart.module.ts")).then(function (m) { return m.ChartPageModule; }); }
+    },
+    {
+        path: 'statchart',
+        loadChildren: function () { return Promise.all(/*! import() | pages-statchart-statchart-module */[__webpack_require__.e("default~pages-chart-chart-module~pages-statchart-statchart-module"), __webpack_require__.e("pages-statchart-statchart-module")]).then(__webpack_require__.bind(null, /*! ./pages/statchart/statchart.module */ "./src/app/pages/statchart/statchart.module.ts")).then(function (m) { return m.StatchartPageModule; }); }
     }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -592,6 +600,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_storage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ionic/storage */ "./node_modules/@ionic/storage/fesm5/ionic-storage.js");
 /* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./user */ "./src/app/user.ts");
 /* harmony import */ var _my_transaction__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./my-transaction */ "./src/app/my-transaction.ts");
+/* harmony import */ var ng2_google_charts__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ng2-google-charts */ "./node_modules/ng2-google-charts/index.js");
+
 
 
 
@@ -674,6 +684,7 @@ var AppModule = /** @class */ (function () {
             declarations: [_app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"]],
             entryComponents: [],
             imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"],
+                ng2_google_charts__WEBPACK_IMPORTED_MODULE_12__["Ng2GoogleChartsModule"],
                 _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"].forRoot(),
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"],
                 _ionic_storage__WEBPACK_IMPORTED_MODULE_9__["IonicStorageModule"].forRoot({
