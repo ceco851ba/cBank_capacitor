@@ -140,7 +140,7 @@ let StatchartPage = class StatchartPage {
         this.storage.get('transactions').then((val) => {
             this.TransactionsList = JSON.parse(val);
             this.TransactionsList.forEach(transaction => {
-                if (transaction.recieverId > transaction.senderId) { ///Receiver ID null --> outgo transaction 
+                if (transaction.recieverId != 0) { ///Receiver ID null --> outgo transaction 
                     this.TransactionsList.push(transaction);
                     if (this.chartDataFiltered.has(transaction.transactionCategory)) {
                         this.chartDataFiltered.set(transaction.transactionCategory, (this.chartDataFiltered.get(transaction.transactionCategory) + transaction.amount));
