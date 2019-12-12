@@ -26,7 +26,7 @@ export class StatchartPage implements OnInit {
   this.storage.get('transactions').then((val) => {
     this.TransactionsList = JSON.parse(val);
     this.TransactionsList.forEach(transaction => {
-      if  (transaction.recieverId = transaction.senderId ){
+      if  (transaction.recieverId != null ){
         
         this.TransactionsList.push(transaction);
           //if my map contains type than we add amount of transaction to value in map else we create new map record
@@ -39,8 +39,8 @@ export class StatchartPage implements OnInit {
 
     }  
     });
-    });
     this.createDoughnut(this.mTypesAndAmounts)
+    });
 
    }
 
