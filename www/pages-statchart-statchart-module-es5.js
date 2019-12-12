@@ -147,7 +147,7 @@ var StatchartPage = /** @class */ (function () {
         this.storage.get('transactions').then(function (val) {
             _this.TransactionsList = JSON.parse(val);
             _this.TransactionsList.forEach(function (transaction) {
-                if (transaction.recieverId != null) { ///Receiver ID null --> outgo transaction 
+                if (transaction.recieverId > transaction.senderId) { ///Receiver ID null --> outgo transaction 
                     _this.TransactionsList.push(transaction);
                     if (_this.chartDataFiltered.has(transaction.transactionCategory)) {
                         _this.chartDataFiltered.set(transaction.transactionCategory, (_this.chartDataFiltered.get(transaction.transactionCategory) + transaction.amount));
