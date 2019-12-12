@@ -41,6 +41,9 @@ export class Tab1Page {
   }
   ionViewDidEnter() {
     this.refreshOnClick();
+
+    this.refreshOnClick();
+
   }
   refreshOnClick(){
     this.storage.get('user').then((val) => {

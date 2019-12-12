@@ -1,10 +1,23 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>statchart</ion-title>
+    <ion-item>
+        <ion-title align="center" style="font-weight: bold; color:rgb(24, 0, 163);">   My Transactions Chart  </ion-title>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <canvas #lineCanvas></canvas>
+    <ion-card>
+  <canvas #PieChartCanvas></canvas>
+
+</ion-card>
+<ion-card>
+  
+<ion-button ion-button expand="block" (click)="gotoTransButtonOnclick()">Transactions</ion-button> 
+
+<ion-button ion-button expand="block" (click)="returnToProfileButtonOnclick()">Return to Profile</ion-button> 
+
+</ion-card>
 
 </ion-content>
+

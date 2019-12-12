@@ -33,6 +33,9 @@ export class Tab2Page {
   returnToProfileButtonOnclick(){
     this.navController.navigateRoot("tabs/tab1");
   }
+  gotoChartButtonOnclick() {
+    this.navController.navigateForward("statchart");
+  }
 
   gotoNewTransaction(){
 
@@ -41,7 +44,10 @@ export class Tab2Page {
   
   ionViewDidEnter() {
     this.refreshOnClick();
+    this.refreshOnClick();
+
   }
+
 
 
   refreshOnClick(){

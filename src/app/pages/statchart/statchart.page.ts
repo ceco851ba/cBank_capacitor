@@ -10,97 +10,117 @@ import { Chart } from 'chart.js';
   styleUrls: ['./statchart.page.scss'],
 })
 export class StatchartPage implements OnInit {
-  @ViewChild('lineCanvas',null) lineCanvas;
+  @ViewChild('PieChartCanvas',null) PieChartCanvas;
 
   TransactionsList : MyTransaction[] = new Array ();
   profile:User = new User();
-  mTypesAndAmounts = new Map<string,number>();
-  lineChart: any;
+  
+  chartDataFiltered = new Map<string,number>();
+  myPieChart: any;
 
   constructor(private storage: Storage, private navController: NavController) {
-
-    this.storage.get('user').then((val) => {
-      this.profile = JSON.parse(val);  
+    this.storage.get('user').then((val) => 
+  {
+    this.profile = JSON.parse(val);  
   });
 
   this.storage.get('transactions').then((val) => {
     this.TransactionsList = JSON.parse(val);
     this.TransactionsList.forEach(transaction => {
-      if  (transaction.recieverId != null ){
+      if (transaction.recieverId != null ){   ///Receiver ID null --> outgo transaction 
         
         this.TransactionsList.push(transaction);
-          //if my map contains type than we add amount of transaction to value in map else we create new map record
-          if(this.mTypesAndAmounts.has(transaction.transactionCategory)){
-            this.mTypesAndAmounts.set(transaction.transactionCategory,(this.mTypesAndAmounts.get(transaction.transactionCategory) + transaction.amount));
+          
+        if(this.chartDataFiltered.has(transaction.transactionCategory))
+          {
+            this.chartDataFiltered.set(transaction.transactionCategory,(this.chartDataFiltered.get(transaction.transactionCategory) + transaction.amount));
           }
-          else{
-            this.mTypesAndAmounts.set(transaction.transactionCategory,transaction.amount)
-      }
+        else
+          {
+            this.chartDataFiltered.set(transaction.transactionCategory,transaction.amount)
+          }
+          }  
+          });
+      this.generatePieChart(this.chartDataFiltered)
+          });
 
-    }  
-    });
-    this.createDoughnut(this.mTypesAndAmounts)
-    });
-
-   }
-
-  ngOnInit() {
   }
 
-  public createDoughnut(inDataMap: Map<string,number>) {
+  ngOnInit() {}
 
-    let bgColors = new Array();
-    let bgHowerColors = new Array();
-    inDataMap.forEach(()=>{
-      bgColors.push( this.hexToRgbA(this.getRandomColor()));
-      console.log("hex to rgbA = ", bgColors[bgColors.length-1]);
-      bgHowerColors.push(this.getRandomColor());
+  public generatePieChart(ChartDataFilteredMap: Map<string,number>) {
+    let GraphBackgroundClr = new Array();
+    let GraphBackgroundHowerClr = new Array();
+      ChartDataFilteredMap.forEach(()=>{
+      GraphBackgroundClr.push(this.ConvHexadecimalToRGBa(this.RandomClrGenerator()));
+      console.log("Converted Hexadecimal to RGBa= ", GraphBackgroundClr[GraphBackgroundClr.length-1]);
+      GraphBackgroundHowerClr.push(this.RandomClrGenerator());
     })
 
-    console.log(inDataMap);
-      this.lineChart = new Chart(this.lineCanvas.nativeElement, {
-
-        type: "doughnut",
+    console.log(ChartDataFilteredMap);
+    this.myPieChart=new Chart(this.PieChartCanvas.nativeElement, 
+      {
+        type: "pie",
+        
         data: {
           datasets: [
             {
               label: "Stats",
-              data: Array.from( inDataMap.values() ),
-              backgroundColor: bgColors,
-              hoverBackgroundColor: bgHowerColors
+              data: Array.from( ChartDataFilteredMap.values() ),
+              backgroundColor: GraphBackgroundClr,
+              hoverBackgroundColor: GraphBackgroundHowerClr,
+              borderColor:'black',
+              borderWidth: 2 
+              
             }
           ],
-          labels: Array.from( inDataMap.keys() )
+          labels:
+          Array.from( ChartDataFilteredMap.keys()  ),
+          
         },
-        options:{
-          legend:{
+         options:{
+         
+          legend: 
+          {
+            
+            display: true,
+            labels: { 
+                fontColor: "#000080",
+            }, 
             position:'bottom'
-          }
-        }
+          },
+          
+            }
       });
       
   }
 
-  getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+ 
+  ConvHexadecimalToRGBa(hex){
+    let clr;
+    clr= hex.substring(1).split('');
+    if(clr.length== 3){
+          clr= [clr[0], clr[0], clr[1], clr[1], clr[2], clr[2]];
     }
-    return color;
-  }
-
-  hexToRgbA(hex){
-    let c;
-    c= hex.substring(1).split('');
-    if(c.length== 3){
-          c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-    }
-    c= '0x'+c.join('');
-    // tslint:disable-next-line: no-bitwise
-    return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',1)';
+    clr= '0x'+clr.join('');
+    return 'rgba('+[(clr>>16)&255, (clr>>8)&255, clr&255].join(',')+',1)';
 }
 
+RandomClrGenerator() {
+  const letters = '0123456789ABCDEF';
+  let randomColor = '#';
+  for (var i = 0; i < 6; i++) {
+    randomColor += letters[Math.floor(Math.random() * 16)];
+  }
+  return randomColor;
+}
 
+gotoTransButtonOnclick(){
+  this.navController.navigateRoot("tabs/tab2");
+}
+
+returnToProfileButtonOnclick(){
+  this.navController.navigateRoot("tabs/tab1");
+}
 
 }
