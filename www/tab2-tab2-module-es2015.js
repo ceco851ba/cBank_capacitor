@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n    <ion-toolbar>\n      <ion-item>\n        <ion-title align=\"center\" style=\"font-weight: bold; color:rgb(24, 0, 163);\">   Transactions  </ion-title>\n      </ion-item>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n      <ion-list >\n          <ion-card *ngFor=\"let transaction of TransactionsList\" (click)= \"transactionDetailClick(transaction)\">\n            <ion-item>\n                <ion-icon name=\"person\"></ion-icon>\n                <ion-label color=\"primary\" floating>Recipient:</ion-label>\n              <ion-text> {{transaction.receiverName}}</ion-text> \n            </ion-item>\n            <ion-item>\n                <ion-icon name=\"keypad\"></ion-icon>\n                <ion-label color=\"primary\" floating>Category:</ion-label>\n              <ion-text >{{transaction.transactionCategory}}</ion-text>\n            </ion-item>\n            \n            <ion-item *ngIf=\"transaction.senderId == profile.userId\">\n                <ion-icon color=\"danger\" name=\"logo-usd\"></ion-icon>\n                <ion-label  floating>Amount:</ion-label>\n              <ion-text><ion-text color=\"danger\" class= \"negativeTransaction\"> - {{transaction.amount}}</ion-text> </ion-text>\n            </ion-item>\n            <ion-item *ngIf=\"transaction.senderId > profile.userId\" >\n                <ion-icon color=\"success\" name=\"logo-usd\"></ion-icon>\n                <ion-label  floating>Amount:</ion-label>\n                <ion-text> <ion-text color=\"success\" class = \"positiveTransaction\"> + {{transaction.amount}}</ion-text></ion-text>\n              </ion-item>\n          </ion-card>\n         \n      </ion-list>\n<ion-card>\n      <ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n      <ion-button ion-button expand=\"block\" (click)=\"gotoNewTransaction()\">Create New Transaction</ion-button> \n\n</ion-card>\n    </ion-content>"
+module.exports = "<ion-header>\n    <ion-toolbar>\n      <ion-item>\n        <ion-title align=\"center\" style=\"font-weight: bold; color:rgb(24, 0, 163);\">   Transactions  </ion-title>\n      </ion-item>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n      <ion-list >\n          <ion-card *ngFor=\"let transaction of TransactionsList\" (click)= \"transactionDetailClick(transaction)\">\n            <ion-item>\n                <ion-icon name=\"person\"></ion-icon>\n                <ion-label color=\"primary\" floating>Recipient:</ion-label>\n              <ion-text> {{transaction.receiverName}}</ion-text> \n            </ion-item>\n            <ion-item>\n                <ion-icon name=\"keypad\"></ion-icon>\n                <ion-label color=\"primary\" floating>Category:</ion-label>\n              <ion-text >{{transaction.transactionCategory}}</ion-text>\n            </ion-item>\n            \n            <ion-item *ngIf=\"transaction.senderId == profile.userId\">\n                <ion-icon color=\"danger\" name=\"logo-usd\"></ion-icon>\n                <ion-label  floating>Amount:</ion-label>\n              <ion-text><ion-text color=\"danger\" class= \"negativeTransaction\"> - {{transaction.amount}}</ion-text> </ion-text>\n            </ion-item>\n            <ion-item *ngIf=\"transaction.senderId > profile.userId\" >\n                <ion-icon color=\"success\" name=\"logo-usd\"></ion-icon>\n                <ion-label  floating>Amount:</ion-label>\n                <ion-text> <ion-text color=\"success\" class = \"positiveTransaction\"> + {{transaction.amount}}</ion-text></ion-text>\n              </ion-item>\n          </ion-card>\n         \n      </ion-list>\n<ion-card>\n      <ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n      <ion-button ion-button expand=\"block\" (click)=\"gotoChartButtonOnclick()\">Show Chart</ion-button>   \n\n      <ion-button ion-button expand=\"block\" (click)=\"gotoNewTransaction()\">Create New Transaction</ion-button> \n\n</ion-card>\n    </ion-content>"
 
 /***/ }),
 
@@ -105,10 +105,14 @@ let Tab2Page = class Tab2Page {
     returnToProfileButtonOnclick() {
         this.navController.navigateRoot("tabs/tab1");
     }
+    gotoChartButtonOnclick() {
+        this.navController.navigateForward("statchart");
+    }
     gotoNewTransaction() {
         this.navController.navigateRoot("tabs/tab3");
     }
     ionViewDidEnter() {
+        this.refreshOnClick();
         this.refreshOnClick();
     }
     refreshOnClick() {

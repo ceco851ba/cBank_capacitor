@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>statchart</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-item>\n        <ion-title align=\"center\" style=\"font-weight: bold; color:rgb(24, 0, 163);\">   My Transactions Chart  </ion-title>\n    </ion-item>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n    <ion-card>\n  <canvas #PieChartCanvas></canvas>\n\n</ion-card>\n<ion-card>\n  \n<ion-button ion-button expand=\"block\" (click)=\"gotoTransButtonOnclick()\">Transactions</ion-button> \n\n<ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n\n</ion-card>\n\n</ion-content>\n\n"
 
 /***/ }),
 
@@ -133,75 +133,84 @@ let StatchartPage = class StatchartPage {
         this.navController = navController;
         this.TransactionsList = new Array();
         this.profile = new _user__WEBPACK_IMPORTED_MODULE_3__["User"]();
-        this.mTypesAndAmounts = new Map();
+        this.chartDataFiltered = new Map();
         this.storage.get('user').then((val) => {
             this.profile = JSON.parse(val);
         });
         this.storage.get('transactions').then((val) => {
             this.TransactionsList = JSON.parse(val);
             this.TransactionsList.forEach(transaction => {
-                if (transaction.recieverId = transaction.senderId) {
+                if (transaction.recieverId != null) { ///Receiver ID null --> outgo transaction 
                     this.TransactionsList.push(transaction);
-                    //if my map contains type than we add amount of transaction to value in map else we create new map record
-                    if (this.mTypesAndAmounts.has(transaction.transactionCategory)) {
-                        this.mTypesAndAmounts.set(transaction.transactionCategory, (this.mTypesAndAmounts.get(transaction.transactionCategory) + transaction.amount));
+                    if (this.chartDataFiltered.has(transaction.transactionCategory)) {
+                        this.chartDataFiltered.set(transaction.transactionCategory, (this.chartDataFiltered.get(transaction.transactionCategory) + transaction.amount));
                     }
                     else {
-                        this.mTypesAndAmounts.set(transaction.transactionCategory, transaction.amount);
+                        this.chartDataFiltered.set(transaction.transactionCategory, transaction.amount);
                     }
                 }
             });
+            this.generatePieChart(this.chartDataFiltered);
         });
-        this.createDoughnut(this.mTypesAndAmounts);
     }
-    ngOnInit() {
-    }
-    createDoughnut(inDataMap) {
-        let bgColors = new Array();
-        let bgHowerColors = new Array();
-        inDataMap.forEach(() => {
-            bgColors.push(this.hexToRgbA(this.getRandomColor()));
-            console.log("hex to rgbA = ", bgColors[bgColors.length - 1]);
-            bgHowerColors.push(this.getRandomColor());
+    ngOnInit() { }
+    generatePieChart(ChartDataFilteredMap) {
+        let GraphBackgroundClr = new Array();
+        let GraphBackgroundHowerClr = new Array();
+        ChartDataFilteredMap.forEach(() => {
+            GraphBackgroundClr.push(this.ConvHexadecimalToRGBa(this.RandomClrGenerator()));
+            console.log("Converted Hexadecimal to RGBa= ", GraphBackgroundClr[GraphBackgroundClr.length - 1]);
+            GraphBackgroundHowerClr.push(this.RandomClrGenerator());
         });
-        console.log(inDataMap);
-        this.lineChart = new chart_js__WEBPACK_IMPORTED_MODULE_5__["Chart"](this.lineCanvas.nativeElement, {
-            type: "doughnut",
+        console.log(ChartDataFilteredMap);
+        this.myPieChart = new chart_js__WEBPACK_IMPORTED_MODULE_5__["Chart"](this.PieChartCanvas.nativeElement, {
+            type: "pie",
             data: {
                 datasets: [
                     {
                         label: "Stats",
-                        data: Array.from(inDataMap.values()),
-                        backgroundColor: bgColors,
-                        hoverBackgroundColor: bgHowerColors
+                        data: Array.from(ChartDataFilteredMap.values()),
+                        backgroundColor: GraphBackgroundClr,
+                        hoverBackgroundColor: GraphBackgroundHowerClr,
+                        borderColor: 'black',
+                        borderWidth: 2
                     }
                 ],
-                labels: Array.from(inDataMap.keys())
+                labels: Array.from(ChartDataFilteredMap.keys()),
             },
             options: {
                 legend: {
+                    display: true,
+                    labels: {
+                        fontColor: "#000080",
+                    },
                     position: 'bottom'
-                }
+                },
             }
         });
     }
-    getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+    ConvHexadecimalToRGBa(hex) {
+        let clr;
+        clr = hex.substring(1).split('');
+        if (clr.length == 3) {
+            clr = [clr[0], clr[0], clr[1], clr[1], clr[2], clr[2]];
         }
-        return color;
+        clr = '0x' + clr.join('');
+        return 'rgba(' + [(clr >> 16) & 255, (clr >> 8) & 255, clr & 255].join(',') + ',1)';
     }
-    hexToRgbA(hex) {
-        let c;
-        c = hex.substring(1).split('');
-        if (c.length == 3) {
-            c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    RandomClrGenerator() {
+        const letters = '0123456789ABCDEF';
+        let randomColor = '#';
+        for (var i = 0; i < 6; i++) {
+            randomColor += letters[Math.floor(Math.random() * 16)];
         }
-        c = '0x' + c.join('');
-        // tslint:disable-next-line: no-bitwise
-        return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',1)';
+        return randomColor;
+    }
+    gotoTransButtonOnclick() {
+        this.navController.navigateRoot("tabs/tab2");
+    }
+    returnToProfileButtonOnclick() {
+        this.navController.navigateRoot("tabs/tab1");
     }
 };
 StatchartPage.ctorParameters = () => [
@@ -209,9 +218,9 @@ StatchartPage.ctorParameters = () => [
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('lineCanvas', null),
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('PieChartCanvas', null),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
-], StatchartPage.prototype, "lineCanvas", void 0);
+], StatchartPage.prototype, "PieChartCanvas", void 0);
 StatchartPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-statchart',

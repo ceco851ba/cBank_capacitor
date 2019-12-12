@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>statchart</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n\n</ion-content>\n"
+module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-item>\n        <ion-title align=\"center\" style=\"font-weight: bold; color:rgb(24, 0, 163);\">   My Transactions Chart  </ion-title>\n    </ion-item>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n    <ion-card>\n  <canvas #PieChartCanvas></canvas>\n\n</ion-card>\n<ion-card>\n  \n<ion-button ion-button expand=\"block\" (click)=\"gotoTransButtonOnclick()\">Transactions</ion-button> \n\n<ion-button ion-button expand=\"block\" (click)=\"returnToProfileButtonOnclick()\">Return to Profile</ion-button> \n\n</ion-card>\n\n</ion-content>\n\n"
 
 /***/ }),
 
@@ -140,85 +140,94 @@ var StatchartPage = /** @class */ (function () {
         this.navController = navController;
         this.TransactionsList = new Array();
         this.profile = new _user__WEBPACK_IMPORTED_MODULE_3__["User"]();
-        this.mTypesAndAmounts = new Map();
+        this.chartDataFiltered = new Map();
         this.storage.get('user').then(function (val) {
             _this.profile = JSON.parse(val);
         });
         this.storage.get('transactions').then(function (val) {
             _this.TransactionsList = JSON.parse(val);
             _this.TransactionsList.forEach(function (transaction) {
-                if (transaction.recieverId = transaction.senderId) {
+                if (transaction.recieverId != null) { ///Receiver ID null --> outgo transaction 
                     _this.TransactionsList.push(transaction);
-                    //if my map contains type than we add amount of transaction to value in map else we create new map record
-                    if (_this.mTypesAndAmounts.has(transaction.transactionCategory)) {
-                        _this.mTypesAndAmounts.set(transaction.transactionCategory, (_this.mTypesAndAmounts.get(transaction.transactionCategory) + transaction.amount));
+                    if (_this.chartDataFiltered.has(transaction.transactionCategory)) {
+                        _this.chartDataFiltered.set(transaction.transactionCategory, (_this.chartDataFiltered.get(transaction.transactionCategory) + transaction.amount));
                     }
                     else {
-                        _this.mTypesAndAmounts.set(transaction.transactionCategory, transaction.amount);
+                        _this.chartDataFiltered.set(transaction.transactionCategory, transaction.amount);
                     }
                 }
             });
+            _this.generatePieChart(_this.chartDataFiltered);
         });
-        this.createDoughnut(this.mTypesAndAmounts);
     }
-    StatchartPage.prototype.ngOnInit = function () {
-    };
-    StatchartPage.prototype.createDoughnut = function (inDataMap) {
+    StatchartPage.prototype.ngOnInit = function () { };
+    StatchartPage.prototype.generatePieChart = function (ChartDataFilteredMap) {
         var _this = this;
-        var bgColors = new Array();
-        var bgHowerColors = new Array();
-        inDataMap.forEach(function () {
-            bgColors.push(_this.hexToRgbA(_this.getRandomColor()));
-            console.log("hex to rgbA = ", bgColors[bgColors.length - 1]);
-            bgHowerColors.push(_this.getRandomColor());
+        var GraphBackgroundClr = new Array();
+        var GraphBackgroundHowerClr = new Array();
+        ChartDataFilteredMap.forEach(function () {
+            GraphBackgroundClr.push(_this.ConvHexadecimalToRGBa(_this.RandomClrGenerator()));
+            console.log("Converted Hexadecimal to RGBa= ", GraphBackgroundClr[GraphBackgroundClr.length - 1]);
+            GraphBackgroundHowerClr.push(_this.RandomClrGenerator());
         });
-        console.log(inDataMap);
-        this.lineChart = new chart_js__WEBPACK_IMPORTED_MODULE_5__["Chart"](this.lineCanvas.nativeElement, {
-            type: "doughnut",
+        console.log(ChartDataFilteredMap);
+        this.myPieChart = new chart_js__WEBPACK_IMPORTED_MODULE_5__["Chart"](this.PieChartCanvas.nativeElement, {
+            type: "pie",
             data: {
                 datasets: [
                     {
                         label: "Stats",
-                        data: Array.from(inDataMap.values()),
-                        backgroundColor: bgColors,
-                        hoverBackgroundColor: bgHowerColors
+                        data: Array.from(ChartDataFilteredMap.values()),
+                        backgroundColor: GraphBackgroundClr,
+                        hoverBackgroundColor: GraphBackgroundHowerClr,
+                        borderColor: 'black',
+                        borderWidth: 2
                     }
                 ],
-                labels: Array.from(inDataMap.keys())
+                labels: Array.from(ChartDataFilteredMap.keys()),
             },
             options: {
                 legend: {
+                    display: true,
+                    labels: {
+                        fontColor: "#000080",
+                    },
                     position: 'bottom'
-                }
+                },
             }
         });
     };
-    StatchartPage.prototype.getRandomColor = function () {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+    StatchartPage.prototype.ConvHexadecimalToRGBa = function (hex) {
+        var clr;
+        clr = hex.substring(1).split('');
+        if (clr.length == 3) {
+            clr = [clr[0], clr[0], clr[1], clr[1], clr[2], clr[2]];
         }
-        return color;
+        clr = '0x' + clr.join('');
+        return 'rgba(' + [(clr >> 16) & 255, (clr >> 8) & 255, clr & 255].join(',') + ',1)';
     };
-    StatchartPage.prototype.hexToRgbA = function (hex) {
-        var c;
-        c = hex.substring(1).split('');
-        if (c.length == 3) {
-            c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    StatchartPage.prototype.RandomClrGenerator = function () {
+        var letters = '0123456789ABCDEF';
+        var randomColor = '#';
+        for (var i = 0; i < 6; i++) {
+            randomColor += letters[Math.floor(Math.random() * 16)];
         }
-        c = '0x' + c.join('');
-        // tslint:disable-next-line: no-bitwise
-        return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',1)';
+        return randomColor;
+    };
+    StatchartPage.prototype.gotoTransButtonOnclick = function () {
+        this.navController.navigateRoot("tabs/tab2");
+    };
+    StatchartPage.prototype.returnToProfileButtonOnclick = function () {
+        this.navController.navigateRoot("tabs/tab1");
     };
     StatchartPage.ctorParameters = function () { return [
         { type: _ionic_storage__WEBPACK_IMPORTED_MODULE_4__["Storage"] },
         { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"] }
     ]; };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('lineCanvas', null),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('PieChartCanvas', null),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
-    ], StatchartPage.prototype, "lineCanvas", void 0);
+    ], StatchartPage.prototype, "PieChartCanvas", void 0);
     StatchartPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-statchart',
